@@ -48,6 +48,7 @@ public class WordCount {
          */
         SparkConf conf =new SparkConf().setAppName("Spark WordCount written by java").setMaster("local");
 
+        //需要有hadoop支撑，下载一个，然后配置环境变量，没配置环境变量的话，手动设置如下
         System.setProperty("hadoop.home.dir", "D:\\Program Files\\hadoop-common-2.2.0-bin-master");
 /**
  * 第2步：创建SparkContext对象
