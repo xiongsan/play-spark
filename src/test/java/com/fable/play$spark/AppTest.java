@@ -35,4 +35,9 @@ public class AppTest
     {
         assertTrue( true );
     }
+
+    public void test(){
+        String strs = "我是你你是我";
+        System.out.println(strs.split("")[0]);
+    }
 }
