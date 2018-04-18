@@ -49,7 +49,7 @@ public class WordCount {
         SparkConf conf =new SparkConf().setAppName("Spark WordCount written by java").setMaster("local");
 
         //需要有hadoop支撑，下载一个，然后配置环境变量，没配置环境变量的话，手动设置如下
-        System.setProperty("hadoop.home.dir", "D:\\Program Files\\hadoop-common-2.2.0-bin-master");
+//        System.setProperty("hadoop.home.dir", "D:\\Program Files\\hadoop-common-2.2.0-bin-master");
 /**
  * 第2步：创建SparkContext对象
  * SparkContext是Spark程序所有功能的唯一入口，无论是采用Scala、Java、Python、R等都必须有一个SparkContext(不同的语言具体的类名称不同，如果是java 的为javaSparkContext)
@@ -67,7 +67,8 @@ public class WordCount {
         JavaRDD<String> lines =sc.textFile("E:/testSpark/content.txt");
         /**
          * 第4步：对初始的JavaRDD进行Transformation级别的处理，例如map、filter等高阶函数等的编程，来进行具体的数据计算
-         * 第4.1步：讲每一行的字符串拆分成单个的单词
+         *
+         * 第4.1步：将每一行的字符串拆分成单个的单词
          */
         JavaRDD<String> words = lines.flatMap(new FlatMapFunction<String,String>(){ //如果是scala由于Sam转化所以可以写成一行代码
 
@@ -79,10 +80,9 @@ public class WordCount {
         List<String> line = lines.collect();
         for(String val:line)
             System.out.println(val);
-/**
- * 第4步：对初始的JavaRDD进行Transformation级别的处理，例如map、filter等高阶函数等的编程，来进行具体的数据计算
- * 第4.2步：在单词拆分的基础上对每个单词实例计数为1，也就是word => (word, 1)
- */
+        /**
+         * 第4.2步：在单词拆分的基础上对每个单词实例计数为1，也就是word => (word, 1)
+         */
         JavaPairRDD<String,Integer> pairs=words.mapToPair(new PairFunction<String, String, Integer>() {
 
             public Tuple2<String, Integer> call(String word) throws Exception {
@@ -90,10 +90,9 @@ public class WordCount {
                 return new Tuple2<String, Integer>(word,1);
             }
         });
-/**
- * 第4步：对初始的RDD进行Transformation级别的处理，例如map、filter等高阶函数等的编程，来进行具体的数据计算
- * 第4.3步：在每个单词实例计数为1基础之上统计每个单词在文件中出现的总次数
- */
+        /**
+         * 第4.3步：在每个单词实例计数为1基础之上统计每个单词在文件中出现的总次数
+         */
         JavaPairRDD<String,Integer> wordsCount =pairs.reduceByKey(new Function2<Integer, Integer, Integer>() { //对相同的Key，进行Value的累计（包括Local和Reducer级别同时Reduce）
             public Integer call(Integer v1, Integer v2) throws Exception {
 // TODO Auto-generated method stub
